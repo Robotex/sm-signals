@@ -32,6 +32,8 @@
 
 Signal g_Signal;		/**< Global singleton for extension's main interface */
 
+IForward *g_pSigTERM = NULL
+
 SMEXT_LINK(&g_Signal);
 
 bool Signal::SDK_OnLoad(char *error, size_t maxlength, bool late)
@@ -43,6 +45,7 @@ bool Signal::SDK_OnLoad(char *error, size_t maxlength, bool late)
     }
 
     playerhelpers->AddClientListener(&g_clientListener);
+    g_pSigTERM = forwards->CreateForward("OnSigTERM", ET_Event, 0, NULL);
     
     return true;
 }

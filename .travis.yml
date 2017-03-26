@@ -1,73 +1,31 @@
-dist: precise
 sudo: false
-
 language: cpp
-compiler: clang
-
-# Install dependencies
 addons:
   apt:
-    sources:
-    - ubuntu-toolchain-r-test
     packages:
-    - lib32stdc++6
-    - lib32z1-dev
-    - libc6-dev-i386
-    - linux-libc-dev
     - g++-multilib
-    - g++-4.8
-  cache:
-    directories:
-    - ../mysql-5.0
-
-# Set the build environment
-env:
-  global:
-  - LLVM_ARCHIVE_URI=http://sourcemod.net/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz
-
+compiler:
+  - clang
 before_install:
-  - wget -nc $LLVM_ARCHIVE_URI -O $HOME/clang+llvm.tar.xz
-  - mkdir -p $HOME/clang+llvm
-  - tar -xf $HOME/clang+llvm.tar.xz -C $HOME/clang+llvm --strip-components 1
-  - export PATH=$HOME/clang+llvm/bin:$PATH
-  - CC=clang-3.8 CXX=clang-3.8
-
+- git clone --depth=1 --branch 1.10-dev https://github.com/alliedmodders/metamod-source mmsource-1.10
+- git clone --depth=1 --recursive --branch=1.8-dev https://github.com/alliedmodders/sourcemod sourcemod
+- git clone --mirror https://github.com/alliedmodders/hl2sdk hl2sdk-proxy-repo
+- git clone --branch l4d2 hl2sdk-proxy-repo hl2sdk-l4d2
+- git clone --depth=1 --branch master https://github.com/alliedmodders/ambuild ambuild
 install:
-  - git clone --branch 1.10-dev https://github.com/alliedmodders/metamod-source mmsource-1.10
-  - git clone --recursive --branch 1.7-dev https://github.com/alliedmodders/sourcemod sourcemod
-  - rm -rf ./sourcemod/sourcepawn/*
-  - git clone --branch master https://github.com/alliedmodders/sourcepawn ./sourcemod/sourcepawn
-  - git clone --mirror https://github.com/alliedmodders/hl2sdk hl2sdk-proxy-repo
-  - git clone --branch l4d2 hl2sdk-proxy-repo hl2sdk-l4d2
-  - git clone --branch master https://github.com/alliedmodders/ambuild ambuild
-  #- bash sourcemod/tools/checkout-deps.sh
-    
+- cd ambuild && python setup.py install --user
+- cd $TRAVIS_BUILD_DIR
+- git fetch --unshallow || true
 before_script:
-  - cd ambuild
-  - python setup.py build
-  - python setup.py install --user
-  - cd ..
-  - mkdir build && cd build
-  - PATH="~/.local/bin:$PATH"
-  - python ../configure.py --enable-optimize --sdks=present --sdks=l4d2
-
+- mkdir build && cd build
+- python ../configure.py --enable-optimize --sdks=present
 script: ambuild
-
-# Deployment phase
 before_deploy:
-  - env GZIP=-9 tar cvzf signals.tar.gz --directory="./package" .
-
+- env GZIP=-9 tar cvzf signals.tar.gz --directory="./package" .
 deploy:
   provider: releases
   api_key:
-    secure: "GGzbvz0wILEuSIvuv2+/0Ym02nModPxM6ZCNUc1ewLv7eEns7eYnhfHCcMxFj+PV4sJgh5QMnLRfr1plekPsFVCSLMTGDWp7cfzVSXHMPURf2oR3+Qm1Nx9zfDMVML4m/ljGO4J1cMbkdZcwn/CLN2x0nnbrxk1m9uS+u5N5FophFbCAOvOHzfkX41cCh4/Efupdge7dw5ZKgLEKlQ8al+G8mnWTKxKB6New6eH1pMU7BTX4z5edlG5gcrjpEM5FYL5ZpJm0qB7DIuOvJHHKJ60UFK5Tc66/fPe742QuTELXg9m27K93z0jOxKbrjlUK4pRhB9GIW4MJbdI8kpb1LGtA0vA33UGfnYB+FsC7gseECCTRJ+5cntHAB6PVn0AqgeonWBvGHqGcHav5ez+WZBMKdPdtsLK51dzgilDbIfKcKXH+pWPa9F5BlYcDI+tuekwqBeK4VDGAC+Nw4t8FM4ikGB8wmnh1Nwo2cYDtmJcq7tsdPc4c9okwgbGhUAG4kQob+bATBuoE8P2YJrTRJ9ucd/cgxGzvDKrGiMImeR9FqggtQPj+keW4UGavKmyoeSCnWP+4w4Yuy5M7QwTTsLtVbjMMYpfqx5LjAIS1UIujaeJhhUGZhIyS7en+KXZAeGH4Z26W9bD/Sq2tXLE6CQa6GnQPD1GIkPDO7JdIsww="
-  file: "signals.tar.gz"
-  skip_cleanup: true
-  overwrite: true
+    secure: Ko6fdnlk608m+qiND/Ae4vFRROmFFRbPLa0tqZdmcTx5nOFEgSZOy1NTYN8Dce6ziDg7KaBecGTJNJombPrZPFs/58zV5LYEyxBH+Tifx7m4QM3RR3fN2XPGq4BM4GYaqjzw6TzPjxNtrk6HJ++8V7wSsRwhKFx2G5cuA2XjQ+lc3aw6+LopzHBvcxvJvlC6DexwqY6ap5ZybvUo6lvhJPAihYO4UK2TZ/u292Q2YK1BDP/UKBhClrEI2GC3pFw2AoYDnznZji8yHwQCE3gEyfISs8xLNFzqJ14Nz1hYKzKkH1g7PKI+R4MLbrPgexeZNeebR/3Rqyg4WNMX6ICeA35xSguSD7C+Oc+hv/sZw3o4TEjLafd1i3d10qVmnllcdVj9u8ScVg06T4BukPyWA0qJHdu2F1Ol8z6IDdcAbz5mQvu7pRHzeiXhUJUWd1jhwUGt73k2GOeNjdtB5Y9Mb9ywk3Uu3VfAe2gvsPTk4gArZXWLVVwXt77kbDSogp2pN+2F0O+U1i5e1fKJBiPwiv0N88Mc939pMVXr6nun8Qh5+GaVKGIY+z9mgmLg2wpf7pVayEiLOz/d2ushLWMg8qWvXoZgTWqwH/u3DOInpEN2DWva/tbVCFtOopaXHV1/EEgHgoNvyUP0C7KqsGsskFlKKiVAjvW+6cR85HSduIY=
+  file: signals.tar.gz
   on:
-    tags: true
-
-# Notifications
-notifications:
-  email: false
-  
+    repo: Robotex/signals-sm

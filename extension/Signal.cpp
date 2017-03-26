@@ -20,39 +20,40 @@
  * Version: $Id$
  */
 
-#include "SignalHandler.h"
+#include "Signal.hpp"
 
-#include <cstdlib>
-#include "ClientListener.h"
-
-volatile std::sig_atomic_t g_signalStatus = 0;
-typedef void (*sig_fn)(int);
-sig_fn sigfn;
+volatile std::sig_atomic_t g_signalStatus;
+IForward *g_pSignalForward = nullptr_t;
 
 void signal_handler (int sig)
 {
-    g_signalStatus = sig;
-
-    if (!hasPlayersConnected())
-    {
-        untrapTERM();
-        raiseTERM();
-    }
+    g_pSignalForward->PushCell(sig);
+    g_pSignalForward->Execute(nullptr_t);
 }
 
-bool trapTERM()
+sig_fn Signal::m_fnOldTrap = nullptr_t;
+
+template <auto n>
+bool Signal::SetTrap()
 {
-    sigfn = signal(SIGTERM, signal_handler);
-    return sigfn != SIG_ERR;
+    sig_fn oldTrap = signal(n, signal_handler);
+    if (oldTrap == SIG_ERR)
+        return false;
+    else if (oldTrap != signal_handler)
+        m_fnOldTrap = oldTrap;
+    return true;
 }
 
-bool untrapTERM()
+template <auto n>
+bool Signal::RemoveTrap()
 {
-    return signal(SIGTERM, sigfn) == signal_handler;
+    if (!m_fnOldTrap)
+        return false;
+    return (signal(n, m_fnOldTrap) != SIG_ERR);
 }
 
-void raiseTERM()
+template <auto n>
+void Signal::Raise()
 {
-    if (raise(SIGTERM) != 0)
-        exit(0);
+    raise(n);
 }

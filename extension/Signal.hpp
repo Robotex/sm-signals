@@ -20,45 +20,24 @@
  * Version: $Id$
  */
 
-#include "ClientListener.h"
+#ifndef SIGNAL_H
+#define SIGNAL_H
 
-#include "SignalHandler.h"
+#include "smsdk_ext.h"
 
-ClientListener g_clientListener;
+typedef void (*sig_fn)(int);
 
-bool hasPlayersConnected()
+template <auto n>
+class Signal
 {
-    int count = playerhelpers->GetNumPlayers();
-    if (count == 0)
-    {
-        int maxplayers = playerhelpers->GetMaxClients();
-        for (int i = 1; i <= maxplayers; ++i)
-        {
-            IGamePlayer *pPlayer = playerhelpers->GetGamePlayer(i);
-            if ((pPlayer->IsConnected()) && !(pPlayer->IsInGame()))
-                return true;
-        }
-        return false;
-    }
-    else
-        return true;
-}
+public:
+    bool SetTrap();
+    bool RemoveTrap();
+    void Raise();
+private:
+    static sig_fn m_fnOldTrap;
+};
 
-void ClientListener::OnClientDisconnected(int client)
-{
-    if (playerhelpers->GetGamePlayer(client)->IsFakeClient())
-        return;
+extern IForward *g_pSignalForward;
 
-    switch (g_signalStatus)
-    {
-    case SIGTERM:
-        if (!hasPlayersConnected())
-        {
-            untrapTERM();
-            raiseTERM();
-        }
-        break;
-    default:
-        break;
-    }
-}
+#endif // SIGNAL_H

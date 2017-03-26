@@ -6,8 +6,7 @@ projectName = 'signals'
 # smsdk_ext.cpp will be automatically added later
 sourceFiles = [
   'extension.cpp',
-  'ClientListener.cpp',
-  'SignalHandler.cpp'
+  'Signal.cpp'
 ]
 
 ###############

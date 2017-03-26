@@ -40,7 +40,7 @@
 /* Basic information exposed publicly */
 #define SMEXT_CONF_NAME			"Signal"
 #define SMEXT_CONF_DESCRIPTION	"Signal handler extension"
-#define SMEXT_CONF_VERSION		"0.1.0.0"
+#define SMEXT_CONF_VERSION		"0.2.0.0"
 #define SMEXT_CONF_AUTHOR		"Robotex"
 #define SMEXT_CONF_URL			"http://www.github.com/Robotex"
 #define SMEXT_CONF_LOGTAG		"SIGNAL"
@@ -61,7 +61,7 @@
 /** Enable interfaces you want to use here by uncommenting lines */
 #define SMEXT_ENABLE_FORWARDSYS
 //#define SMEXT_ENABLE_HANDLESYS
-#define SMEXT_ENABLE_PLAYERHELPERS
+//#define SMEXT_ENABLE_PLAYERHELPERS
 //#define SMEXT_ENABLE_DBMANAGER
 //#define SMEXT_ENABLE_GAMECONF
 //#define SMEXT_ENABLE_MEMUTILS

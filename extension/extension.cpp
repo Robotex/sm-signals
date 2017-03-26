@@ -22,8 +22,7 @@
 
 #include "extension.h"
 
-#include "ClientListener.h"
-#include "SignalHandler.h"
+#include "Signal.h"
 
 /**
  * @file extension.cpp
@@ -31,8 +30,6 @@
  */
 
 Signal g_Signal;		/**< Global singleton for extension's main interface */
-
-IForward *g_pSigTERM = NULL
 
 SMEXT_LINK(&g_Signal);
 
@@ -44,14 +41,13 @@ bool Signal::SDK_OnLoad(char *error, size_t maxlength, bool late)
         return false;
     }
 
-    playerhelpers->AddClientListener(&g_clientListener);
-    g_pSigTERM = forwards->CreateForward("OnSigTERM", ET_Event, 0, NULL);
+    g_pSignalForward = forwards->CreateForward("OnSignal", ET_Event, 1, NULL, Param_Cell);
     
     return true;
 }
 
 void Signal::SDK_OnUnload()
 {
-    playerhelpers->RemoveClientListener(&g_clientListener);
+    forwards->ReleaseForward(g_pSigTERM);
     untrapTERM();
 }

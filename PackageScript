@@ -48,7 +48,7 @@ def CopyFiles(src, dest, files):
 #)
 
 # Insert autoload file
-CopyFiles('autoload', 'addons/sourcemod/extensions',
+CopyFiles('.', 'addons/sourcemod/extensions',
   [ 'signals.autoload', ]
 )
 

@@ -26,18 +26,19 @@
 #include <cstddef>
 
 volatile std::sig_atomic_t g_signalStatus;
-IForward *g_pSignalForward = std::nullptr_t;
+IForward *g_pSignalForward = nullptr;
 
 void signal_handler (int sig)
 {
     g_pSignalForward->PushCell(sig);
-    g_pSignalForward->Execute(std::nullptr_t);
+    g_pSignalForward->Execute(nullptr);
 }
 
-sig_fn Signal::m_fnOldTrap = std::nullptr_t;
+template <int n>
+sig_fn Signal<n>::m_fnOldTrap = nullptr;
 
 template <int n>
-bool Signal::SetTrap()
+bool Signal<n>::SetTrap()
 {
     sig_fn oldTrap = signal(n, signal_handler);
     if (oldTrap == SIG_ERR)
@@ -48,7 +49,7 @@ bool Signal::SetTrap()
 }
 
 template <int n>
-bool Signal::RemoveTrap()
+bool Signal<n>::RemoveTrap()
 {
     if (!m_fnOldTrap)
         return false;
@@ -56,7 +57,7 @@ bool Signal::RemoveTrap()
 }
 
 template <int n>
-void Signal::Raise()
+void Signal<n>::Raise()
 {
     raise(n);
 }

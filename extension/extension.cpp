@@ -35,7 +35,7 @@ SMEXT_LINK(&g_Signal);
 
 bool SignalExtension::SDK_OnLoad(char *error, size_t maxlength, bool late)
 { 
-    if (!Signal::SetTrap())
+    if (!Signal<15>::SetTrap())
     {
         snprintf(error, maxlength, "Error setting signal handler!");
         return false;
@@ -49,5 +49,5 @@ bool SignalExtension::SDK_OnLoad(char *error, size_t maxlength, bool late)
 void SignalExtension::SDK_OnUnload()
 {
     forwards->ReleaseForward(g_pSignalForward);
-    Signal::RemoveTrap();
+    Signal<15>::RemoveTrap();
 }

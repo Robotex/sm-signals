@@ -22,7 +22,7 @@
 
 #include "extension.h"
 
-#include "Signal.h"
+#include "Signal.hpp"
 
 /**
  * @file extension.cpp

@@ -24,4 +24,4 @@ public Extension:__ext_signals =
  *
  * @noreturn 
  */
-forward OnPlayerSayChat(signal);
+forward void OnSignal(int signal);

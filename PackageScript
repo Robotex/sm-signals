@@ -29,9 +29,9 @@ def CopyFiles(src, dest, files):
     builder.AddCopy(source_path, dest_entry)
 
 # Include files 
-#CopyFiles('include', 'addons/sourcemod/scripting/include',
-#  [ 'sample.inc', ]
-#)
+CopyFiles('include', 'addons/sourcemod/scripting/include',
+  [ 'signal.inc', ]
+)
 
 # GameData files
 #CopyFiles('gamedata', 'addons/sourcemod/gamedata',
@@ -46,11 +46,6 @@ def CopyFiles(src, dest, files):
 #  'otherconfig.cfg,
 #  ]
 #)
-
-# Insert autoload file
-CopyFiles('.', 'addons/sourcemod/extensions',
-  [ 'signals.autoload', ]
-)
 
 # Copy binaries.
 for cxx_task in Extension.extensions:

@@ -13,12 +13,8 @@ public Plugin myinfo =
 	url = "http://github.com/Robotex"
 };
 
-public void OnPluginStart()
-{
-
-}
-
 bool g_isSignaled = false;
+bool g_isMapTransitioning = false;
  
 public void OnSignal(int signal)
 {
@@ -30,8 +26,35 @@ public void OnSignal(int signal)
 	}    
 }
 
-public void OnMapEnd()
+public void OnClientDisconnect_Post(int client)
 {
-
+	if (g_isSignaled && !HasPlayersConnected() && !g_isMapTransitioning)
+		ServerCommand("quit");
 }
 
+public void OnMapStart()
+{
+	g_isMapTransitioning = false;
+}
+
+public void OnMapEnd()
+{
+	g_isMapTransitioning = true;
+}
+
+public bool HasPlayersConnected()
+{
+    int count = GetClientCount(true);
+    if (count == 0)
+    {
+        int maxplayers = GetMaxClients();
+        for (int i = 1; i <= maxplayers; ++i)
+        {
+            if (IsClientConnected(i) && !IsClientInGame(i))
+                return true;
+        }
+        return false;
+    }
+    else
+        return true;
+}

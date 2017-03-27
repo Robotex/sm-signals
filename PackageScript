@@ -29,9 +29,9 @@ def CopyFiles(src, dest, files):
     builder.AddCopy(source_path, dest_entry)
 
 # Include files 
-CopyFiles('include', 'addons/sourcemod/scripting/include',
-  [ 'signals.inc', ]
-)
+#CopyFiles('include', 'addons/sourcemod/scripting/include',
+#  [ 'signals.inc', ]
+#)
 
 # GameData files
 #CopyFiles('gamedata', 'addons/sourcemod/gamedata',

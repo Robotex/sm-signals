@@ -61,3 +61,6 @@ void Signal<n>::Raise()
 {
     raise(n);
 }
+
+// Explicit instantations
+template class Signal<15>;

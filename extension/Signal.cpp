@@ -26,15 +26,15 @@
 #include <cstddef>
 
 volatile std::sig_atomic_t g_signalStatus;
-IForward *g_pSignalForward = nullptr_t;
+IForward *g_pSignalForward = std::nullptr_t;
 
 void signal_handler (int sig)
 {
     g_pSignalForward->PushCell(sig);
-    g_pSignalForward->Execute(nullptr_t);
+    g_pSignalForward->Execute(std::nullptr_t);
 }
 
-sig_fn Signal::m_fnOldTrap = nullptr_t;
+sig_fn Signal::m_fnOldTrap = std::nullptr_t;
 
 template <int n>
 bool Signal::SetTrap()

@@ -33,7 +33,7 @@ void signal_handler (int sig)
 
 sig_fn Signal::m_fnOldTrap = nullptr_t;
 
-template <auto n>
+template <int n>
 bool Signal::SetTrap()
 {
     sig_fn oldTrap = signal(n, signal_handler);
@@ -44,7 +44,7 @@ bool Signal::SetTrap()
     return true;
 }
 
-template <auto n>
+template <int n>
 bool Signal::RemoveTrap()
 {
     if (!m_fnOldTrap)
@@ -52,7 +52,7 @@ bool Signal::RemoveTrap()
     return (signal(n, m_fnOldTrap) != SIG_ERR);
 }
 
-template <auto n>
+template <int n>
 void Signal::Raise()
 {
     raise(n);

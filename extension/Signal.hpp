@@ -27,7 +27,7 @@
 
 typedef void (*sig_fn)(int);
 
-template <auto n>
+template <int n = 15>
 class Signal
 {
 public:

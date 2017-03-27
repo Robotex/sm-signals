@@ -48,7 +48,9 @@ def CopyFiles(src, dest, files):
 #)
 
 # Insert autoload file
-job.AddCommand(CopyFile(os.path.join(AMBuild.sourceFolder, 'signals.autoload'), os.path.join('addons', 'sourcemod', 'extensions')))
+CopyFiles('autoload', 'addons/sourcemod/extensions',
+  [ 'signals.autoload', ]
+)
 
 # Copy binaries.
 for cxx_task in Extension.extensions:

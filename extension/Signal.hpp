@@ -31,9 +31,9 @@ template <int n = 15>
 class Signal
 {
 public:
-    bool SetTrap();
-    bool RemoveTrap();
-    void Raise();
+    static bool SetTrap();
+    static bool RemoveTrap();
+    static void Raise();
 private:
     static sig_fn m_fnOldTrap;
 };

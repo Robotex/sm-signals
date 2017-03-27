@@ -34,7 +34,7 @@
  * @brief Sample implementation of the SDK Extension.
  * Note: Uncomment one of the pre-defined virtual functions in order to use it.
  */
-class Signal : public SDKExtension
+class SignalExtension : public SDKExtension
 {
 public:
 	/**

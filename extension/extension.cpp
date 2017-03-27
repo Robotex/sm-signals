@@ -29,13 +29,13 @@
  * @brief Implement extension code here.
  */
 
-Signal g_Signal;		/**< Global singleton for extension's main interface */
+SignalExtension g_Signal;		/**< Global singleton for extension's main interface */
 
 SMEXT_LINK(&g_Signal);
 
 bool Signal::SDK_OnLoad(char *error, size_t maxlength, bool late)
 { 
-    if (!trapTERM())
+    if (!Signal::SetTrap())
     {
         snprintf(error, maxlength, "Error setting signal handler!");
         return false;
@@ -48,6 +48,6 @@ bool Signal::SDK_OnLoad(char *error, size_t maxlength, bool late)
 
 void Signal::SDK_OnUnload()
 {
-    forwards->ReleaseForward(g_pSigTERM);
-    untrapTERM();
+    forwards->ReleaseForward(g_pSignalForward);
+    Signal::RemoveTrap();
 }

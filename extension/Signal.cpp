@@ -22,6 +22,8 @@
 
 #include "Signal.hpp"
 
+#include <csignal>
+
 volatile std::sig_atomic_t g_signalStatus;
 IForward *g_pSignalForward = nullptr_t;
 

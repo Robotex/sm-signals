@@ -33,7 +33,7 @@ SignalExtension g_Signal;		/**< Global singleton for extension's main interface 
 
 SMEXT_LINK(&g_Signal);
 
-bool Signal::SDK_OnLoad(char *error, size_t maxlength, bool late)
+bool SignalExtension::SDK_OnLoad(char *error, size_t maxlength, bool late)
 { 
     if (!Signal::SetTrap())
     {
@@ -46,7 +46,7 @@ bool Signal::SDK_OnLoad(char *error, size_t maxlength, bool late)
     return true;
 }
 
-void Signal::SDK_OnUnload()
+void SignalExtension::SDK_OnUnload()
 {
     forwards->ReleaseForward(g_pSignalForward);
     Signal::RemoveTrap();

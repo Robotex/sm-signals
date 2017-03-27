@@ -47,6 +47,11 @@ def CopyFiles(src, dest, files):
 #  ]
 #)
 
+# Insert autoload file
+CopyFiles('.', 'addons/sourcemod/extensions',
+  [ 'signals.autoload', ]
+)
+
 # Copy binaries.
 for cxx_task in Extension.extensions:
   builder.AddCopy(cxx_task.binary, folder_map['addons/sourcemod/extensions'])
